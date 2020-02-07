@@ -27,21 +27,25 @@ const kittyPrompts = {
 
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const filtered = kitties.filter(kitty => kitty.color === 'orange');
+    const result = filtered.map(kitty => kitty.name);
+
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Filter will produce a shallow copy of the array that only contains objects that have the property matching 'orange'. Map will affect the elements in that result and return
   },
 
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort(function(a,b) {
+      return b.age - a.age;
+    });
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Sort can sort whatever values you input, so I just input the age property of each kitty
   },
 
   growUp() {
@@ -57,8 +61,11 @@ const kittyPrompts = {
     //   color: 'orange'
     // },
     // ...etc]
+    kitties.forEach((kitty) => {
+      kitty.age += 2;
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties;
     return result;
   }
 };
