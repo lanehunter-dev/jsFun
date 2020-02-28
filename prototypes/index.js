@@ -61,6 +61,7 @@ const kittyPrompts = {
     //   color: 'orange'
     // },
     // ...etc]
+
     kitties.forEach((kitty) => {
       kitty.age += 2;
     });
@@ -69,10 +70,6 @@ const kittyPrompts = {
     return result;
   }
 };
-
-
-
-
 
 
 // ---------------------------------------------------------------------------
@@ -97,11 +94,23 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+
+
+    const result =
+    clubs.reduce((obj, el) => {
+      el.members.forEach(member => {
+        if (!obj[member]) {
+          obj[member] = [];
+        }
+        obj[member].push(el.club);
+      });
+      return obj;
+    }, {});
+
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // I started by using filter and map to separate out the names into a new array and remove duplicates, however, my mentor showed me that reduce would be able to do everything in one array prototype. We start by seeing if a key with the name of the person exists within our empty object (reduce initial value is {}). If it doesn't exist, we make it using the person's name. Then, for as many members as there are, we push in the clubs that they belong to into each respective name using bracket notation.
   }
 };
 
@@ -133,7 +142,11 @@ const modPrompts = {
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    mods.map(el => {
+      return {mod: el.mod, studentsPerInstructor: (el.students / el.instructors)};
+    });
+
     return result;
 
     // Annotation:
@@ -168,7 +181,11 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    cakes.map(el => {
+      return {flavor: el.cakeFlavor, inStock: el.inStock};
+    });
+
     return result;
 
     // Annotation:
@@ -196,7 +213,8 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    cakes.filter(el => el.inStock);
     return result;
 
     // Annotation:
@@ -207,7 +225,9 @@ const cakePrompts = {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((acc, el) => {
+      return acc += el.inStock;
+    }, 0);
     return result;
 
     // Annotation:
@@ -219,7 +239,15 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    cakes.reduce((list, cake) => {
+      cake.toppings.forEach(ingredient => {
+        if(!list.includes(ingredient)) {
+          list.push(ingredient);
+        }
+      });
+      return list;
+    }, []);
     return result;
 
     // Annotation:
@@ -237,11 +265,21 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    cakes.reduce((list, cake) => {
+      cake.toppings.forEach(topping => {
+        if (!list[topping]) {
+          list[topping] = 1;
+        } else {
+          list[topping] ++;
+        }
+      });
+      return list;
+    }, {});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce can do everything we need here. I first start by iterating through each of the ingredients that exist, duplicates and all. I then use bracket notation to check if that ingredient has been added to the list we're creating. If it doesn't exist yet, add it to the list with a value of 1. On the next iteration, if it does exist in our list already, just increment that value by 1. The resulting object has all ingredients with the amount they occur.
   }
 };
 
@@ -272,7 +310,8 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    classrooms.filter(item => item.program === 'FE');
     return result;
 
     // Annotation:
@@ -287,7 +326,18 @@ const classPrompts = {
     //   beCapacity: 96
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    classrooms.reduce((obj, item) => {
+      if (item.program === 'FE') {
+        obj.feCapacity += item.capacity;
+      } else if (item.program === 'BE') {
+        obj.beCapacity += item.capacity;
+      }
+      return obj;
+    }, {
+      feCapacity: 0,
+      beCapacity: 0
+    });
     return result;
 
     // Annotation:
@@ -297,7 +347,8 @@ const classPrompts = {
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    classrooms.sort((a, b) => a.capacity - b.capacity);
     return result;
 
     // Annotation:
@@ -323,8 +374,9 @@ const bookPrompts = {
     //   'The Curious Incident of the Dog in the Night - Time', 'The Bell Jar',
     //   'Catch-22', 'Treasure Island']
 
+    let nonViolent = books.filter(book => book.genre !== 'Horror' && book.genre !== 'True Crime');
+    const result = nonViolent.map(book => book.title);
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
     return result;
 
     // Annotation:
@@ -339,7 +391,17 @@ const bookPrompts = {
     //  { title: 'Life of Pi', year: 2001 },
     //  { title: 'The Curious Incident of the Dog in the Night-Time', year: 2003 }]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+
+    const result =
+    books.reduce((newBooks, book) => {
+      if (book.published >= 1990 && book.published <= 2010) {
+        newBooks.push({
+          title: book.title,
+          year: book.published
+        });
+      }
+      return newBooks;
+    }, []);
     return result;
 
     // Annotation:
@@ -362,10 +424,19 @@ const weatherPrompts = {
     // return an array of all the average temperatures. Eg:
     // [ 40, 40, 44.5, 43.5, 57, 35, 65.5, 62, 14, 46.5 ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    weather.map(location => {
+      return (location.temperature.high + location.temperature.low) / 2;
+    });
     return result;
 
     // Annotation:
+    // You can also do this with a reduce, but it's a bit too much.
+    // weather.reduce((avgTemps, location) => {
+    //   let avg = (location.temperature.high + location.temperature.low) / 2
+    //   avgTemps.push(avg)
+    //   return avgTemps;
+    // }, []);
     // Write your annotation here as a comment
   },
 
@@ -376,7 +447,13 @@ const weatherPrompts = {
     // 'New Orleans, Louisiana is sunny.',
     // 'Raleigh, North Carolina is mostly sunny.' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    weather.reduce((sunnySpots, location) => {
+      if (location.type === 'sunny' || location.type === 'mostly sunny') {
+        sunnySpots.push(`${location.location} is ${location.type}.`);
+      }
+      return sunnySpots;
+    }, []);
     return result;
 
     // Annotation:
@@ -392,7 +469,10 @@ const weatherPrompts = {
     //   temperature: { high: 49, low: 38 }
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    weather.sort((a,b) => {
+      return b.humidity - a.humidity;
+    })[0];
     return result;
 
     // Annotation:
@@ -415,11 +495,16 @@ const nationalParksPrompts = {
     /// Return an object containing the names of which parks I need to visit
     // and the ones I have already visited eg:
     // {
-    //   parksToVisit: ["Yellowstone", "Glacier", "Everglades"],
-    //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
+    //   parksToVisit: ['Yellowstone', 'Glacier', 'Everglades'],
+    //   parksVisited: ['Rocky Mountain', 'Acadia', 'Zion']
     //}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    nationalParks.reduce((sortedParks, park) => {
+      park.visited ? sortedParks.parksVisited.push(park.name) : sortedParks.parksToVisit.push(park.name);
+      return sortedParks;
+    }, {parksToVisit: [], parksVisited: []});
+
     return result;
 
     // Annotation:
@@ -436,7 +521,12 @@ const nationalParksPrompts = {
     // { Florida: 'Everglades' } ]
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    nationalParks.map(park => {
+      return {
+        [park.location]: park.name,
+      };
+    });
     return result;
 
     // Annotation:
@@ -459,7 +549,13 @@ const nationalParksPrompts = {
     //   'backpacking',
     //   'rock climbing' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    nationalParks.reduce((parkActivities, park) => {
+      park.activities.forEach(activity => {
+        !parkActivities.includes(activity) ? parkActivities.push(activity) : false;
+      });
+      return parkActivities;
+    }, []);
     return result;
 
     // Annotation:
@@ -486,7 +582,10 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((totalCount, brewery) => {
+      totalCount += brewery.beers.length;
+      return totalCount;
+    }, 0);
     return result;
 
     // Annotation:
@@ -502,7 +601,13 @@ const breweryPrompts = {
     // ...etc.
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    breweries.map(brewery => {
+      return {
+        name: brewery.name,
+        beerCount: brewery.beers.length
+      };
+    });
     return result;
 
     // Annotation:
@@ -514,8 +619,13 @@ const breweryPrompts = {
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const result =
+    breweries.flatMap(brewery => {
+      return brewery.beers;
+    });
+    return result.sort((a,b) => {
+      return b.abv - a.abv;
+    })[0];
 
     // Annotation:
     // Write your annotation here as a comment
@@ -562,7 +672,16 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    instructors.reduce((studentCounts, instructor) => {
+      studentCounts.push({
+        name: instructor.name,
+        studentCount: cohorts.find(cohort => {
+          return cohort.module === instructor.module;
+        }).studentCount
+      });
+      return studentCounts;
+    }, []);
     return result;
 
     // Annotation:
@@ -576,7 +695,12 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    cohorts.reduce((studentsPerTeacher, cohort) => {
+      !studentsPerTeacher['cohort' + cohort.cohort] ?
+        studentsPerTeacher['cohort' + cohort.cohort] = cohort.studentCount / instructors.filter(instructor => instructor.module === cohort.module).length : 0;
+      return studentsPerTeacher;
+    }, {});
     return result;
 
     // Annotation:
@@ -598,10 +722,20 @@ const turingPrompts = {
     //     Will: [1, 2, 3, 4]
     //   }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =
+    instructors.reduce((modsPerTeach, teacher) => {
+      modsPerTeach[teacher.name] = [];
+      cohorts.forEach(cohort => {
+        modsPerTeach[teacher.name] = modsPerTeach[teacher.name]
+      })
+      return modsPerTeach;
+    }, {});
+
+
     return result;
 
     // Annotation:
+    // Object.keys(teacher).
     // Write your annotation here as a comment
   },
 
@@ -720,16 +854,16 @@ const astronomyPrompts = {
   constellationsStarsExistIn() {
     // Return an array of the names of the constellations that the brightest stars are part of e.g.
 
-    //  [ "Canis Major",
-    //    "Carina",
-    //    "Boötes",
-    //    "Auriga",
-    //    "Orion",
-    //    "Lyra",
-    //    "Canis Minor",
-    //    "The Plow",
-    //    "Orion",
-    //    "The Little Dipper" ]
+    //  [ 'Canis Major',
+    //    'Carina',
+    //    'Boötes',
+    //    'Auriga',
+    //    'Orion',
+    //    'Lyra',
+    //    'Canis Minor',
+    //    'The Plow',
+    //    'Orion',
+    //    'The Little Dipper' ]
 
 
     const result = 'REPLACE WITH YOUR RESULT HERE';
